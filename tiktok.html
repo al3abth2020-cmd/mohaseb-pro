@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جرد عملات تيك توك</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Tahoma, sans-serif;
+    background: #0f1226;
+    color: #fff;
+    padding: 16px;
+    padding-bottom: 160px;
+  }
+  h1 { text-align: center; font-size: 22px; margin: 8px 0 4px; }
+  .hint { text-align: center; color: #9aa0c0; font-size: 13px; margin-bottom: 12px; }
+
+  .rate {
+    max-width: 600px;
+    margin: 0 auto 16px;
+    background: #161a38;
+    border: 1px solid #2a3060;
+    border-radius: 14px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  .rate input {
+    width: 90px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    background: #0f1226;
+    color: #ffd36b;
+    border: 1px solid #2a3060;
+    border-radius: 10px;
+    padding: 8px;
+    direction: ltr;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .card {
+    background: linear-gradient(145deg, #1d2148, #161a38);
+    border: 2px solid #2a3060;
+    border-radius: 18px;
+    padding: 14px 12px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform .08s, border-color .2s;
+    position: relative;
+  }
+  .card:active { transform: scale(.97); border-color: #4f8cff; }
+  .card .coin { font-size: 22px; }
+  .card .value {
+    font-size: 22px; font-weight: 800; margin: 4px 0 0;
+    color: #ffd36b; direction: ltr;
+  }
+  .card .label { font-size: 11px; color: #9aa0c0; }
+
+  .cost-row {
+    margin: 10px 0 6px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .cost-row span { font-size: 13px; color: #9aa0c0; }
+  .cost-row input {
+    width: 70px; text-align: center; font-size: 15px; font-weight: 700;
+    background: #0f1226; color: #6be3a3;
+    border: 1px solid #2a3060; border-radius: 10px; padding: 7px 4px; direction: ltr;
+  }
+  .sar-each { font-size: 12px; color: #9aa0c0; direction: ltr; min-height: 15px; }
+
+  .card .count {
+    margin-top: 8px; font-size: 15px; font-weight: 700;
+    background: #4f8cff; color: #fff; border-radius: 12px; padding: 7px 0;
+  }
+  .card .subtotal {
+    margin-top: 6px; font-size: 14px; font-weight: 700;
+    color: #6be3a3; direction: ltr; min-height: 18px;
+  }
+
+  .minus {
+    position: absolute; top: 8px; left: 8px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #ff5d6c; color: #fff; border: none;
+    font-size: 20px; font-weight: 700; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .minus:active { transform: scale(.9); }
+
+  .totalbar {
+    position: fixed; bottom: 0; right: 0; left: 0;
+    background: #161a38; border-top: 2px solid #2a3060;
+    padding: 12px 16px; display: flex; justify-content: space-between;
+    align-items: center; gap: 12px;
+  }
+  .totalbar .grand { font-size: 24px; font-weight: 900; color: #6be3a3; direction: ltr; }
+  .totalbar .grand small { font-size: 13px; color: #9aa0c0; font-weight: 600; }
+  .totalbar .sub { font-size: 12px; color: #9aa0c0; margin-top: 2px; direction: ltr; }
+  .reset {
+    background: #2a3060; color: #fff; border: none; border-radius: 12px;
+    padding: 12px 16px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  }
+  .reset:active { transform: scale(.95); }
+</style>
+</head>
+<body>
+  <h1>🧮 جرد عملات تيك توك</h1>
+  <div class="hint">اضغط على المنتج لزيادة العدد · اكتب التكلفة بالدولار لكل منتج</div>
+
+  <div class="rate">
+    💱 سعر الدولار:
+    <input id="rate" type="number" inputmode="decimal" step="0.01" value="3.75" onclick="event.stopPropagation()">
+    ريال
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="totalbar">
+    <div>
+      <div class="grand"><span id="grand">0</span> <small>ريال</small></div>
+      <div class="sub"><span id="pieces">0</span> قطعة · تكلفة <span id="usdtotal">0</span>$</div>
+    </div>
+    <button class="reset" onclick="resetAll()">تصفير العدد</button>
+  </div>
+
+<script>
+  const products = [1400, 3500, 7000, 10000, 17500, 50000, 100000];
+
+  const counts = JSON.parse(localStorage.getItem('jard_counts') || '{}');
+  const costs  = JSON.parse(localStorage.getItem('jard_costs')  || '{}');
+  let rate = parseFloat(localStorage.getItem('jard_rate')) || 3.75;
+
+  const grid = document.getElementById('grid');
+  const rateInput = document.getElementById('rate');
+  rateInput.value = rate;
+
+  function fmt(n){ return (Math.round(n*100)/100).toLocaleString('en-US'); }
+  function saveCounts(){ localStorage.setItem('jard_counts', JSON.stringify(counts)); }
+  function saveCosts(){  localStorage.setItem('jard_costs',  JSON.stringify(costs)); }
+
+  rateInput.addEventListener('input', () => {
+    rate = parseFloat(rateInput.value) || 0;
+    localStorage.setItem('jard_rate', rate);
+    render();
+  });
+
+  function render(){
+    grid.innerHTML = '';
+    products.forEach((val, i) => {
+      const c = counts[i] || 0;
+      const usd = costs[i] || 0;
+      const sarEach = usd * rate;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.onclick = () => { counts[i] = (counts[i]||0) + 1; saveCounts(); render(); };
+      card.innerHTML = `
+        <button class="minus" onclick="event.stopPropagation(); dec(${i})">−</button>
+        <div class="coin">🪙</div>
+        <div class="value">${fmt(val)}</div>
+        <div class="label">عملة</div>
+
+        <div class="cost-row">
+          <span>$</span>
+          <input type="number" inputmode="decimal" step="0.01" placeholder="التكلفة"
+                 value="${usd || ''}"
+                 onclick="event.stopPropagation()"
+                 oninput="setCost(${i}, this.value)">
+        </div>
+        <div class="sar-each">${usd ? '= ' + fmt(sarEach) + ' ريال للحبة' : ''}</div>
+
+        <div class="count">العدد: ${c}</div>
+        <div class="subtotal">${c && usd ? fmt(sarEach*c) + ' ريال' : ''}</div>
+      `;
+      grid.appendChild(card);
+    });
+    updateTotal();
+  }
+
+  function setCost(i, v){
+    costs[i] = parseFloat(v) || 0;
+    saveCosts();
+    // تحديث المجاميع والقيم بدون إعادة بناء كاملة (عشان ما يطلع المؤشر من الخانة)
+    const cards = grid.children;
+    const usd = costs[i] || 0, c = counts[i] || 0, sarEach = usd*rate;
+    cards[i].querySelector('.sar-each').textContent = usd ? '= ' + fmt(sarEach) + ' ريال للحبة' : '';
+    cards[i].querySelector('.subtotal').textContent = (c && usd) ? fmt(sarEach*c) + ' ريال' : '';
+    updateTotal();
+  }
+
+  function dec(i){
+    if(counts[i] > 0) counts[i]--;
+    saveCounts(); render();
+  }
+
+  function updateTotal(){
+    let grandSar = 0, pieces = 0, usdTotal = 0;
+    products.forEach((val, i) => {
+      const c = counts[i] || 0;
+      const usd = costs[i] || 0;
+      grandSar += usd * rate * c;
+      usdTotal += usd * c;
+      pieces += c;
+    });
+    document.getElementById('grand').textContent = fmt(grandSar);
+    document.getElementById('pieces').textContent = fmt(pieces);
+    document.getElementById('usdtotal').textContent = fmt(usdTotal);
+  }
+
+  function resetAll(){
+    if(confirm('متأكد تبي تصفّر عدد كل المنتجات؟ (التكاليف بتبقى زي ما هي)')){
+      for(const k in counts) delete counts[k];
+      saveCounts(); render();
+    }
+  }
+
+  render();
+</script>
+</body>
+</html>
