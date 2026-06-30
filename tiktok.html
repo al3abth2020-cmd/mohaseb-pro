@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>جرد عملات تيك توك</title>
+<title>جرد تيك توك</title>
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body {
@@ -12,98 +12,98 @@
     background: #0f1226;
     color: #fff;
     padding: 16px;
-    padding-bottom: 160px;
+    padding-bottom: 170px;
   }
-  h1 { text-align: center; font-size: 22px; margin: 8px 0 4px; }
+  h1 { text-align: center; font-size: 22px; margin: 6px 0 2px; }
   .hint { text-align: center; color: #9aa0c0; font-size: 13px; margin-bottom: 12px; }
 
+  .toolbar {
+    max-width: 600px; margin: 0 auto 12px;
+    display: flex; gap: 10px;
+  }
+  .toolbar button {
+    flex: 1; border: none; border-radius: 14px; padding: 14px 10px;
+    font-size: 15px; font-weight: 800; cursor: pointer; color: #fff;
+  }
+  .btn-copy { background: linear-gradient(145deg,#2bb673,#199e5e); }
+  .btn-add  { background: linear-gradient(145deg,#4f8cff,#3a6ddc); }
+  .toolbar button:active { transform: scale(.96); }
+
   .rate {
-    max-width: 600px;
-    margin: 0 auto 16px;
-    background: #161a38;
-    border: 1px solid #2a3060;
-    border-radius: 14px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 14px;
+    max-width: 600px; margin: 0 auto 16px;
+    background: #161a38; border: 1px solid #2a3060; border-radius: 14px;
+    padding: 10px 14px; display: flex; align-items: center; justify-content: center;
+    gap: 10px; font-size: 14px;
   }
   .rate input {
-    width: 90px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: 700;
-    background: #0f1226;
-    color: #ffd36b;
-    border: 1px solid #2a3060;
-    border-radius: 10px;
-    padding: 8px;
-    direction: ltr;
+    width: 90px; text-align: center; font-size: 16px; font-weight: 700;
+    background: #0f1226; color: #ffd36b; border: 1px solid #2a3060;
+    border-radius: 10px; padding: 8px; direction: ltr;
   }
 
   .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    max-width: 600px;
-    margin: 0 auto;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    max-width: 600px; margin: 0 auto;
   }
   .card {
     background: linear-gradient(145deg, #1d2148, #161a38);
-    border: 2px solid #2a3060;
-    border-radius: 18px;
-    padding: 14px 12px;
-    text-align: center;
-    cursor: pointer;
-    user-select: none;
-    transition: transform .08s, border-color .2s;
-    position: relative;
+    border: 2px solid #2a3060; border-radius: 18px; padding: 14px 12px 12px;
+    text-align: center; cursor: pointer; user-select: none;
+    transition: transform .08s, border-color .2s; position: relative;
   }
   .card:active { transform: scale(.97); border-color: #4f8cff; }
-  .card .coin { font-size: 22px; }
-  .card .value {
-    font-size: 22px; font-weight: 800; margin: 4px 0 0;
-    color: #ffd36b; direction: ltr;
-  }
-  .card .label { font-size: 11px; color: #9aa0c0; }
 
-  .cost-row {
-    margin: 10px 0 6px;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
+  .name-input {
+    width: 100%; text-align: center; font-size: 16px; font-weight: 800;
+    background: transparent; color: #fff; border: none;
+    border-bottom: 1px dashed #3a4080; padding: 4px 0 6px; margin-top: 18px;
   }
+  .name-input:focus { outline: none; border-bottom-color: #4f8cff; }
+
+  .val-row { margin: 8px 0 4px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+  .val-row input {
+    width: 86px; text-align: center; font-size: 19px; font-weight: 800;
+    background: #0f1226; color: #ffd36b; border: 1px solid #2a3060;
+    border-radius: 8px; padding: 4px; direction: ltr;
+  }
+  .val-row span { font-size: 11px; color: #9aa0c0; }
+
+  .cost-row { margin: 8px 0 4px; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .cost-row span { font-size: 13px; color: #9aa0c0; }
   .cost-row input {
     width: 70px; text-align: center; font-size: 15px; font-weight: 700;
-    background: #0f1226; color: #6be3a3;
-    border: 1px solid #2a3060; border-radius: 10px; padding: 7px 4px; direction: ltr;
+    background: #0f1226; color: #6be3a3; border: 1px solid #2a3060;
+    border-radius: 10px; padding: 7px 4px; direction: ltr;
   }
   .sar-each { font-size: 12px; color: #9aa0c0; direction: ltr; min-height: 15px; }
 
   .card .count {
-    margin-top: 8px; font-size: 15px; font-weight: 700;
-    background: #4f8cff; color: #fff; border-radius: 12px; padding: 7px 0;
+    margin-top: 8px; font-size: 16px; font-weight: 800;
+    background: #4f8cff; color: #fff; border-radius: 12px; padding: 9px 0;
   }
-  .card .subtotal {
-    margin-top: 6px; font-size: 14px; font-weight: 700;
-    color: #6be3a3; direction: ltr; min-height: 18px;
-  }
+  .card .subtotal { margin-top: 6px; font-size: 14px; font-weight: 700; color: #6be3a3; direction: ltr; min-height: 18px; }
 
-  .minus {
-    position: absolute; top: 8px; left: 8px;
-    width: 32px; height: 32px; border-radius: 50%;
-    background: #ff5d6c; color: #fff; border: none;
-    font-size: 20px; font-weight: 700; line-height: 1;
+  .minus, .del {
+    position: absolute; top: 8px; width: 30px; height: 30px; border-radius: 50%;
+    border: none; color: #fff; font-size: 17px; font-weight: 700; line-height: 1;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
   }
-  .minus:active { transform: scale(.9); }
+  .minus { left: 8px; background: #ff5d6c; font-size: 20px; }
+  .del   { right: 8px; background: #5a4060; }
+  .minus:active, .del:active { transform: scale(.9); }
+
+  .add-card {
+    border: 2px dashed #3a4080; background: transparent; border-radius: 18px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #9aa0c0; cursor: pointer; min-height: 120px; font-weight: 700;
+  }
+  .add-card:active { transform: scale(.97); }
+  .add-card .plus { font-size: 34px; line-height: 1; }
 
   .totalbar {
     position: fixed; bottom: 0; right: 0; left: 0;
     background: #161a38; border-top: 2px solid #2a3060;
-    padding: 12px 16px; display: flex; justify-content: space-between;
-    align-items: center; gap: 12px;
+    padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
   }
   .totalbar .grand { font-size: 24px; font-weight: 900; color: #6be3a3; direction: ltr; }
   .totalbar .grand small { font-size: 13px; color: #9aa0c0; font-weight: 600; }
@@ -113,11 +113,24 @@
     padding: 12px 16px; font-size: 14px; font-weight: 700; cursor: pointer; white-space: nowrap;
   }
   .reset:active { transform: scale(.95); }
+
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+    background: #199e5e; color: #fff; padding: 12px 22px; border-radius: 30px;
+    font-weight: 700; font-size: 15px; opacity: 0; pointer-events: none;
+    transition: opacity .25s, bottom .25s; z-index: 50;
+  }
+  .toast.show { opacity: 1; bottom: 100px; }
 </style>
 </head>
 <body>
-  <h1>🧮 جرد عملات تيك توك</h1>
-  <div class="hint">اضغط على المنتج لزيادة العدد · اكتب التكلفة بالدولار لكل منتج</div>
+  <h1>🧮 جرد تيك توك</h1>
+  <div class="hint">اضغط على المنتج لزيادة العدد · عدّل الاسم والقيمة كيف ما تبي</div>
+
+  <div class="toolbar">
+    <button class="btn-copy" onclick="copyReport()">📋 نسخ التقرير</button>
+    <button class="btn-add" onclick="addProduct()">➕ إضافة منتج</button>
+  </div>
 
   <div class="rate">
     💱 سعر الدولار:
@@ -135,20 +148,23 @@
     <button class="reset" onclick="resetAll()">تصفير العدد</button>
   </div>
 
-<script>
-  const products = [1400, 3500, 7000, 10000, 17500, 50000, 100000];
+  <div class="toast" id="toast">تم النسخ ✅</div>
 
-  const counts = JSON.parse(localStorage.getItem('jard_counts') || '{}');
-  const costs  = JSON.parse(localStorage.getItem('jard_costs')  || '{}');
+<script>
+  const DEFAULTS = [1400, 3500, 7000, 10000, 17500, 50000, 100000].map(v => ({
+    name: 'عملة', value: v, cost: 0, count: 0
+  }));
+
+  let products = JSON.parse(localStorage.getItem('jard_products_v2') || 'null') || DEFAULTS;
   let rate = parseFloat(localStorage.getItem('jard_rate')) || 3.75;
+  let uid = 0;
 
   const grid = document.getElementById('grid');
   const rateInput = document.getElementById('rate');
   rateInput.value = rate;
 
   function fmt(n){ return (Math.round(n*100)/100).toLocaleString('en-US'); }
-  function saveCounts(){ localStorage.setItem('jard_counts', JSON.stringify(counts)); }
-  function saveCosts(){  localStorage.setItem('jard_costs',  JSON.stringify(costs)); }
+  function save(){ localStorage.setItem('jard_products_v2', JSON.stringify(products)); }
 
   rateInput.addEventListener('input', () => {
     rate = parseFloat(rateInput.value) || 0;
@@ -158,60 +174,85 @@
 
   function render(){
     grid.innerHTML = '';
-    products.forEach((val, i) => {
-      const c = counts[i] || 0;
-      const usd = costs[i] || 0;
-      const sarEach = usd * rate;
+    products.forEach((p, i) => {
+      const sarEach = (p.cost||0) * rate;
       const card = document.createElement('div');
       card.className = 'card';
-      card.onclick = () => { counts[i] = (counts[i]||0) + 1; saveCounts(); render(); };
+      card.onclick = () => { products[i].count = (products[i].count||0) + 1; save(); render(); };
       card.innerHTML = `
         <button class="minus" onclick="event.stopPropagation(); dec(${i})">−</button>
-        <div class="coin">🪙</div>
-        <div class="value">${fmt(val)}</div>
-        <div class="label">عملة</div>
+        <button class="del" onclick="event.stopPropagation(); delProduct(${i})">🗑</button>
+
+        <input class="name-input" value="${(p.name||'').replace(/"/g,'&quot;')}"
+               placeholder="اسم المنتج" onclick="event.stopPropagation()"
+               oninput="setField(${i},'name',this.value)">
+
+        <div class="val-row">
+          <input type="number" inputmode="numeric" value="${p.value || ''}" placeholder="القيمة"
+                 onclick="event.stopPropagation()" oninput="setField(${i},'value',this.value); refreshCard(${i})">
+          <span>عملة</span>
+        </div>
 
         <div class="cost-row">
           <span>$</span>
-          <input type="number" inputmode="decimal" step="0.01" placeholder="التكلفة"
-                 value="${usd || ''}"
-                 onclick="event.stopPropagation()"
-                 oninput="setCost(${i}, this.value)">
+          <input type="number" inputmode="decimal" step="0.01" value="${p.cost || ''}" placeholder="التكلفة"
+                 onclick="event.stopPropagation()" oninput="setField(${i},'cost',this.value); refreshCard(${i})">
         </div>
-        <div class="sar-each">${usd ? '= ' + fmt(sarEach) + ' ريال للحبة' : ''}</div>
+        <div class="sar-each">${p.cost ? '= ' + fmt(sarEach) + ' ريال للحبة' : ''}</div>
 
-        <div class="count">العدد: ${c}</div>
-        <div class="subtotal">${c && usd ? fmt(sarEach*c) + ' ريال' : ''}</div>
+        <div class="count">العدد: ${p.count||0}</div>
+        <div class="subtotal">${(p.count && p.cost) ? fmt(sarEach*p.count) + ' ريال' : ''}</div>
       `;
       grid.appendChild(card);
     });
+
+    const addCard = document.createElement('div');
+    addCard.className = 'add-card';
+    addCard.onclick = addProduct;
+    addCard.innerHTML = `<div class="plus">＋</div><div>إضافة منتج</div>`;
+    grid.appendChild(addCard);
+
     updateTotal();
   }
 
-  function setCost(i, v){
-    costs[i] = parseFloat(v) || 0;
-    saveCosts();
-    // تحديث المجاميع والقيم بدون إعادة بناء كاملة (عشان ما يطلع المؤشر من الخانة)
-    const cards = grid.children;
-    const usd = costs[i] || 0, c = counts[i] || 0, sarEach = usd*rate;
-    cards[i].querySelector('.sar-each').textContent = usd ? '= ' + fmt(sarEach) + ' ريال للحبة' : '';
-    cards[i].querySelector('.subtotal').textContent = (c && usd) ? fmt(sarEach*c) + ' ريال' : '';
+  // تحديث القيم بدون إعادة بناء كامل (نحافظ على المؤشر داخل الخانة)
+  function setField(i, key, v){
+    products[i][key] = (key === 'name') ? v : (parseFloat(v) || 0);
+    save();
     updateTotal();
   }
+  function refreshCard(i){
+    const p = products[i];
+    const sarEach = (p.cost||0) * rate;
+    const card = grid.children[i];
+    if(!card) return;
+    card.querySelector('.sar-each').textContent = p.cost ? '= ' + fmt(sarEach) + ' ريال للحبة' : '';
+    card.querySelector('.subtotal').textContent = (p.count && p.cost) ? fmt(sarEach*p.count) + ' ريال' : '';
+  }
 
-  function dec(i){
-    if(counts[i] > 0) counts[i]--;
-    saveCounts(); render();
+  function dec(i){ if(products[i].count>0) products[i].count--; save(); render(); }
+
+  function addProduct(){
+    products.push({ name: 'منتج جديد', value: 0, cost: 0, count: 0 });
+    save(); render();
+    // ركّز على اسم آخر منتج مضاف
+    const names = grid.querySelectorAll('.name-input');
+    const last = names[names.length-1];
+    if(last){ last.focus(); last.select(); }
+  }
+
+  function delProduct(i){
+    if(confirm('تبي تحذف «' + (products[i].name||'') + '»؟')){
+      products.splice(i,1); save(); render();
+    }
   }
 
   function updateTotal(){
     let grandSar = 0, pieces = 0, usdTotal = 0;
-    products.forEach((val, i) => {
-      const c = counts[i] || 0;
-      const usd = costs[i] || 0;
-      grandSar += usd * rate * c;
-      usdTotal += usd * c;
-      pieces += c;
+    products.forEach(p => {
+      grandSar += (p.cost||0) * rate * (p.count||0);
+      usdTotal += (p.cost||0) * (p.count||0);
+      pieces += (p.count||0);
     });
     document.getElementById('grand').textContent = fmt(grandSar);
     document.getElementById('pieces').textContent = fmt(pieces);
@@ -219,10 +260,47 @@
   }
 
   function resetAll(){
-    if(confirm('متأكد تبي تصفّر عدد كل المنتجات؟ (التكاليف بتبقى زي ما هي)')){
-      for(const k in counts) delete counts[k];
-      saveCounts(); render();
+    if(confirm('تبي تصفّر عدد كل المنتجات؟ (الأسماء والتكاليف تبقى)')){
+      products.forEach(p => p.count = 0); save(); render();
     }
+  }
+
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  }
+
+  function copyReport(){
+    const now = new Date();
+    const date = now.toLocaleDateString('ar-EG') + ' - ' + now.toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'});
+    let grandSar = 0, pieces = 0, usdTotal = 0;
+    let lines = ['🧮 جرد تيك توك', '📅 ' + date, '━━━━━━━━━━━'];
+    products.forEach(p => {
+      const c = p.count||0;
+      if(c <= 0) return;
+      const sar = (p.cost||0) * rate * c;
+      grandSar += sar; pieces += c; usdTotal += (p.cost||0)*c;
+      lines.push(`▫️ ${p.name} (${fmt(p.value)}) × ${c} = ${fmt(sar)} ريال`);
+    });
+    lines.push('━━━━━━━━━━━');
+    lines.push('🔢 عدد القطع: ' + fmt(pieces));
+    lines.push('💵 التكلفة: ' + fmt(usdTotal) + ' دولار');
+    lines.push('💰 الإجمالي: ' + fmt(grandSar) + ' ريال');
+    const text = lines.join('\n');
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(() => toast('تم نسخ التقرير ✅'))
+        .catch(() => fallbackCopy(text));
+    } else { fallbackCopy(text); }
+  }
+
+  function fallbackCopy(text){
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('تم نسخ التقرير ✅'); }
+    catch(e){ alert(text); }
+    document.body.removeChild(ta);
   }
 
   render();
